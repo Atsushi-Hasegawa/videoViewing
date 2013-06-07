@@ -1,5 +1,5 @@
 <?php
-require_once(ROOT_DIR."/html/kadai4.brk/DBConnect.php");
+require_once(ROOT_DIR."/html/movie/DBConnect.php");
 
 class Movie implements DBConnect {
 	private $_pdo;
