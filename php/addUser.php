@@ -34,6 +34,6 @@ if(isset($_POST["new"])){
 	}
 }
 $smarty->assign("message", $message);
-$smarty->display("create.html");
+$smarty->display("addUser.html");
 ?>
 

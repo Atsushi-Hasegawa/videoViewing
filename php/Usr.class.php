@@ -4,13 +4,14 @@ require_once(ROOT_DIR."/html/kadai4.brk/DBConnect.php");
 class Usr implements DBConnect {
 	private $_pdo;
 
-	function __construct () {
+	function __construct() {
 		$this->_pdo = $this->dbConnect();
 		if ($this->_pdo == false) exit("データベースにアクセスできません");
 	}
 
-	function dbConnect () {
+	function dbConnect() {
 		try {
+			$config = $this->loadConfig();
 			$dsn = $config[0];
 			$usr = $config[1];
 			$passwd = $config[2];
@@ -34,7 +35,7 @@ class Usr implements DBConnect {
 		return $config;
 	}
 
-	function getUser () {
+	function getUser() {
 		$query = "SELECT * FROM person";
 		$stmt = $this->_pdo->prepare($query);
 		if ($stmt == false) return false;
@@ -45,7 +46,7 @@ class Usr implements DBConnect {
 		return $data_list;
 	}
 
-	function addUser ($usr) {
+	function addUser($usr) {
 		$query = "INSERT INTO person(name,password) ";
 		$query.= "VALUES(:name,:password)";
 		$stmt = $this->_pdo->prepare($query);
@@ -57,7 +58,7 @@ class Usr implements DBConnect {
 		return true;
 	}
 
-	function isAuthorities ($usr_list, $name, $pass) {
+	function isAuthorities($usr_list, $name, $pass) {
 		if ($usr_list) {
 			foreach ($usr_list as $usr) {
 				if ($usr["name"] == $name && 
