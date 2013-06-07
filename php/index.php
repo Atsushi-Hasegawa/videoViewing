@@ -22,7 +22,7 @@ if(isset($_POST["login"])){
 	}
 }
 $smarty->assign("message", $message);
-$smarty->display("entrance.html");
+$smarty->display("index.html");
 
 ?>
 
