@@ -15,8 +15,7 @@ if (is_uploaded_file($_FILES["upfile"]["tmp_name"])) {
 		//更新ファイルとエンコード,DB保存法のファイルを分ける
 		$upload["usr"]   = $_SESSION["name"];
 		$upload["name"]  = $_FILES["upfile"]["name"];
-		$end             = stripos($upload["name"],".");
-		$length          = $end;
+		$length          = stripos($upload["name"],".");
 		$upload["name"]  = substr($upload["name"],0,$length);
 		$upload["title"] = $_POST["title"];
 		$upload["tag"]   = $_POST["tag"];

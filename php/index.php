@@ -12,12 +12,12 @@ $user = new Usr();
 $user_list = $user->getUser();
 $message = "";
 //ユーザ，パスワード認証
-if(isset($_POST["login"])){
-	if($user->isAuthorities($user_list, $_POST["name"],$_POST["password"])){
+if (isset($_POST["login"])) {
+	if ($user->isAuthorities($user_list, $_POST["name"],$_POST["password"])) {
 		$_SESSION["name"] = $_POST["name"];
 		$_SESSION["password"] = $_POST["password"];
 		header("Location: searchMovie.php");
-	}else{
+	} else {
 		$message = "ユーザ名，パスワードとも間違っています";
 	}
 }

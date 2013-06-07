@@ -21,9 +21,9 @@ class Movie implements DBConnect {
 		}
 		return $pdo;
 	}
-	
+
 	private function loadConfig() {
-		$file = fopen('DataBaseConfig.file', 'r');
+		$file = fopen("DataBaseConfig.file", "r");
 		if ($file == false) return false;
 		$config = null;
 		$count = 0;
@@ -129,11 +129,11 @@ class Movie implements DBConnect {
 
 	function addComment($id, $data, $usr) {
 		$query = "INSERT INTO Comment(video_id,com,usr) ";
-		$query.= "VALUES(:video_id,:com,:usr)";
+		$query.= "VALUES(:video_id,:comment,:usr)";
 		$stmt  = $this->_pdo->prepare($query);
 		if ($stmt == false) return false;
 		$stmt->bindValue(":video_id", $id, PDO::PARAM_INT);
-		$stmt->bindValue(":com", $data, PDO::PARAM_STR);
+		$stmt->bindValue(":comment", $data, PDO::PARAM_STR);
 		$stmt->bindValue(":usr", $usr, PDO::PARAM_STR);
 		$result = $stmt->execute();
 		if ($result == false) return false;

@@ -23,7 +23,7 @@ class Usr implements DBConnect {
 	}
 
 	private function loadConfig() {
-		$file = fopen('DataBaseConfig.file', 'r');
+		$file = fopen("DataBaseConfig.file", "r");
 		if ($file == false) return false;
 		$config = null;
 		$count = 0;

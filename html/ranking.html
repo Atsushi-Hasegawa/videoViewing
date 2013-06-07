@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>ランキング</title>
+</head>
+<body>
+<center>
+<H1>ランキング一覧</H1>
+<a href="searchMovie.php">戻る</a>
+<br><br>{{$name|escape}}
+{{foreach from = $data_list item = data}}
+{{if $data.count gt 0 }}
+<h4>再生回数:{{$data.count|escape}}</h4>
+{{$data.title|escape}}<br>
+<img src="{{$data.thumbnail|escape}}"/><br>
+{{/if}}
+{{/foreach}}
+</center>
+</body>
+</html>
