@@ -6,12 +6,12 @@ require_once(ROOT_DIR."/libs/MySmarty.class.php");
 $movie = new Movie();
 $smarty = new MySmarty();
 $result = array();
-$data = array(array());
+$movie_comment = array(array());
 $comment_list = $movie->getComment($_SESSION["video_id"]);
 $viewCount = $movie->getRanking();
 if($comments){
 	foreach($comment_list as $key => $comment){
-		$data[$key]["comment"] = $comment["com"];
+		$movie_comment[$key]["comment"] = $comment["com"];
 	}
 }
 foreach($viewCount as $view){
@@ -24,7 +24,7 @@ $index["tag"] = $_SESSION["tag"];
 $index["title"] = $_SESSION["title"];
 $index["url"] = $_SESSION["url"];
 $smarty->assign("index", $index);
-$smarty->assign("data", $data);
+$smarty->assign("data", $movie_comment);
 $smarty->assign("result", $result);
 $smarty->display("videoViewing.html");
 ?>
