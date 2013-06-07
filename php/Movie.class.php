@@ -11,14 +11,28 @@ class Movie implements DBConnect {
 
 	function dbConnect () {
 		try {
-			$dsn = "mysql:dbname=Movie;host=localhost";
-			$usr = "root";
-			$passwd = "scryed&";
+			$config = $this->loadConfig();
+			$dsn = $config[0];
+			$usr = $config[1];
+			$passwd = $config[2];
 			$pdo = new PDO($dsn, $usr, $passwd);
 		} catch (PDOException $e) {
 			return false;
 		}
 		return $pdo;
+	}
+	
+	private function loadConfig() {
+		$file = fopen('DataBaseConfig.file', 'r');
+		if ($file == false) return false;
+		$config = null;
+		$count = 0;
+		while (!feof($file)){
+			$config[$count] = fgets($file);
+			$config[$count] = trim($config[$count]);
+			$count++;
+		}
+		return $config;
 	}
 
 	function getTitle ($keyword) {

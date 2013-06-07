@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR."/html/movie/DBConnect.php");
+require_once(ROOT_DIR."/html/kadai4.brk/DBConnect.php");
 class Usr implements DBConnect {
 	private $_pdo;
 
@@ -11,14 +11,27 @@ class Usr implements DBConnect {
 
 	function dbConnect () {
 		try {
-			$dsn = "mysql:dbname=Movie; host=localhost";
-			$usr = "root";
-			$passwd = "scryed&";
+			$dsn = $config[0];
+			$usr = $config[1];
+			$passwd = $config[2];
 			$pdo = new PDO($dsn, $usr, $passwd);
 		} catch (PDOException $e) {
 			return false;
 		}
 		return $pdo;
+	}
+
+	private function loadConfig() {
+		$file = fopen('DataBaseConfig.file', 'r');
+		if ($file == false) return false;
+		$config = null;
+		$count = 0;
+		while (!feof($file)){
+			$config[$count] = fgets($file);
+			$config[$count] = trim($config[$count]);
+			$count++;
+		}
+		return $config;
 	}
 
 	function getUser () {

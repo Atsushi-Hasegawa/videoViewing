@@ -3,24 +3,22 @@
 session_start();
 define("ROOT_DIR","/var/www");
 require_once(ROOT_DIR."/html/movie/Movie.class.php");
+require_once(ROOT_DIR."/libs/MySmarty.class.php");
 $movie = new Movie();
-if(isset($_POST["request"]) && $_POST['request'] != "" && $_POST["time"] > 0 && $_POST["time"] < $_POST["max"]){
-	//$xaxis = 300 + rand(50,150);
+$smarty = new MySmarty();
+$message = "";
+
+if (isset($_POST["request"]) && $_POST['request'] != "" &&
+    $_POST["time"] > 0 && $_POST["time"] < $_POST["max"]) {
 	$xaxis = rand(400,600);
 	$yaxis = rand(10,200);
-	//$yaxis = 200 + rand(10,50);
 	$str = "{time:".round($_POST["time"],2).", message:'".$_POST["request"]."', x:$xaxis, y:$yaxis}";
 	$movie->addComment($_SESSION["video_id"], $str, $_SESSION["name"]);
 	$movie_list = $movie->getComment($_SESSION["video_id"]);
-	if($movie_list){
-		foreach($movie_list as $list){
-			echo $list["com"];
-		}
-	}
-}elseif(empty($_POST['request'])){
-	echo "コメントが入力されていません";
-}else if($_POST["time"] <= 0 || $_POST["time"] < $_POST["max"]){
-	echo "動画再生中にコメントしてください";
+} else if (empty($_POST['request'])) {
+	$message = "コメントが入力されていません";
+} else if ($_POST["time"] <= 0 || $_POST["time"] < $_POST["max"]) {
+	$message = "動画再生中にコメントしてください";
 }
 //再生回数の更新
 if(isset($_POST["num"]) && isset($_POST["view"])){
@@ -36,4 +34,7 @@ if(isset($_POST["num"]) && isset($_POST["view"])){
 if(isset($_POST["tag"])){
 	$movie->addTag($_POST["tag"], $_SESSION["video_id"]);
 }
-unset($movie);
+
+$smarty->assign("movie_list", $movie_list);
+$smarty->assign("message", $message);
+$smarty->display("videoViewing.html");
