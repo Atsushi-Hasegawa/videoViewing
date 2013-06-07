@@ -4,12 +4,12 @@ require_once(ROOT_DIR."/html/movie/DBConnect.php");
 class Movie implements DBConnect {
 	private $_pdo;
 
-	function __construct () {
+	function __construct() {
 		$this->_pdo = $this->dbConnect();
 		if ($this->_pdo == false) exit("データベースに接続できませんでした");
 	}
 
-	function dbConnect () {
+	function dbConnect() {
 		try {
 			$config = $this->loadConfig();
 			$dsn = $config[0];
@@ -35,7 +35,7 @@ class Movie implements DBConnect {
 		return $config;
 	}
 
-	function getTitle ($keyword) {
+	function getTitle($keyword) {
 		$query = "SELECT * FROM video ";
 		$query.= " WHERE title like :keyword";
 		$stmt = $this->_pdo->prepare($query);
@@ -52,7 +52,7 @@ class Movie implements DBConnect {
 		return $data_list;
 	}
 
-	function getRanking () {
+	function getRanking() {
 		$query = "SELECT * FROM video ";
 		$query.= " ORDER BY count DESC";
 		$stmt = $this->_pdo->prepare($query);
@@ -68,7 +68,7 @@ class Movie implements DBConnect {
 		return $data_list;
 	}
 
-	function getTag ($keyword) {
+	function getTag($keyword) {
 		$query = "SELECT * FROM video ";
 		$query.="WHERE tag like :keyword";
 		$stmt = $this->_pdo->prepare($query);
@@ -85,7 +85,7 @@ class Movie implements DBConnect {
 		return $data_list;
 	}
 
-	function getComment ($id) {
+	function getComment($id) {
 		$query = "SELECT * from Comment ";
 		$query.= "WHERE video_id=:id";
 		$stmt  = $this->_pdo->prepare($query);
@@ -98,7 +98,7 @@ class Movie implements DBConnect {
 		return $data_list;
 	}
 
-	function addTag ($tag, $video_id) {
+	function addTag($tag, $video_id) {
 		$query = "INSERT INTO video(tag) ";
 		$query.="VALUES(:tag) WHERE video_id=:video_id";
 		$stmt = $this->_pdo->prepare($query);
@@ -110,7 +110,7 @@ class Movie implements DBConnect {
 		return true;
 	}
 
-	function addMovie ($data) {
+	function addMovie($data) {
 		$query  = "INSERT INTO video(name,title,tag,url,usr,thumbnail,count) ";
 		$query .= "VALUES(:name,:title,:tag,:url,:usr,:thumbnail,:count)";
 		$stmt = $this->_pdo->prepare($query);
@@ -127,7 +127,7 @@ class Movie implements DBConnect {
 		return true;
 	}
 
-	function addComment ($id, $data, $usr) {
+	function addComment($id, $data, $usr) {
 		$query = "INSERT INTO Comment(video_id,com,usr) ";
 		$query.= "VALUES(:video_id,:com,:usr)";
 		$stmt  = $this->_pdo->prepare($query);
@@ -140,7 +140,7 @@ class Movie implements DBConnect {
 		return true;
 	}	
 
-	function updateViewCount ($count, $video_id) {
+	function updateViewCount($count, $video_id) {
 		$query = "UPDATE video SET count=:count ";
 		$query.="WHERE video_id=:video_id";
 		$stmt = $this->_pdo->prepare($query);
@@ -153,7 +153,7 @@ class Movie implements DBConnect {
 	}
 
 	//セキュリティ
-	function h ($str) {
+	function format($str) {
 		$str = htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
 		return $str;
 	}

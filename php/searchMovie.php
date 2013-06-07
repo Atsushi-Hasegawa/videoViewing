@@ -16,7 +16,7 @@ if (empty($_SESSION["name"])) {
 		if (empty($_GET["keyword"])) {
 			$message = "検索ワードが入力されていません.";
 		} else {
-			$keyword = $movie->h($_GET["keyword"]);
+			$keyword = $movie->format($_GET["keyword"]);
 			if (isset($_GET["title"])) {
 				$movie_list = $movie->getTitle($keyword);
 			} else if (isset($_GET["tag"])) {
