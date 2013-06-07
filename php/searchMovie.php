@@ -6,12 +6,13 @@ session_start();
 $smarty = new MySmarty();
 $movie = new Movie();
 $movie_list = array(array());
-$message="";
-$keyword="";
+$message=null;
+$keyword=null;
+$name=null;
 if (empty($_SESSION["name"])) {
 	header("Location: index.php");
 } else {
-	$message = $_SESSION["name"]."さんようこそ";
+	$name = $_SESSION["name"]."さんようこそ";
 	if (isset($_GET["set"])) {
 		if (empty($_GET["keyword"])) {
 			$message = "検索ワードが入力されていません.";
@@ -38,6 +39,7 @@ if (empty($_SESSION["name"])) {
 		}
 	}
 }
+$smarty->assign("name", $name);
 $smarty->assign("message", $message);
 $smarty->assign("data_list",$movie_list);
 $smarty->assign("keyword",$keyword);
