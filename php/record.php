@@ -18,7 +18,7 @@ if (isset($_POST["request"]) && $_POST['request'] != "" &&
 //再生回数の更新
 if (isset($_POST["num"]) && isset($_POST["view"])) {
 	$count = 0;
-	if ($_POST["view"] !== NULL) {
+	if ($_POST["view"] != NULL) {
 		$count = $_POST["view"] + $_POST["num"];
 	} else {
 		$count = $_POST["num"];

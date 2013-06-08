@@ -9,26 +9,25 @@ $smarty = new MySmarty();
 session_start();
 session_regenerate_id(true);
 $message ="";
-if(isset($_POST["new"])){
-	if(empty($_POST["name"]) == false && 
-			empty($_POST["password"]) == false){
-		if($usr_list){
-			foreach($usr_list as $user){
-				if($_POST["name"] != $user["name"] && 
-						sha1($_POST["password"]) != $user["password"]){
+if (isset($_POST["new"])) {
+	if (!empty($_POST["name"]) && !empty ($_POST["password"])) {
+		if ($usr_list) {
+			foreach ($usr_list as $user) {
+				if ($_POST["name"] != $user["name"] && 
+						sha1($_POST["password"]) != $user["password"]) {
 					$usr->addUser($_POST);
 					$message = "登録ありがとうございます";
-				}elseif($_POST["name"] == $user["name"] || sha1($_POST["password"] == $user["password"])){
+				} else if ($_POST["name"] == $user["name"] || sha1($_POST["password"] == $user["password"])) {
 					$message = "既に登録されています";
 				}
 			}
 		}
-	}else{
-		if($_POST["name"] == "" && $_POST["password"] ==""){
+	} else {
+		if ($_POST["name"] == "" && $_POST["password"] =="") {
 			$message = "ユーザ名，パスワードを入力してください";
-		}elseif($_POST["name"] == ""){
+		} else if ($_POST["name"] == "") {
 			$message = "ユーザ名を入力してください";
-		}elseif($_POST["password"] ==""){
+		} else if ($_POST["password"] =="") {
 			$message = "パスワードを入力してください";
 		}
 	}
