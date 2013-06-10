@@ -16,12 +16,12 @@ if (isset($_POST["request"]) && $_POST['request'] != "" &&
 	echo "動画再生中にコメントしてください";
 }
 //再生回数の更新
-if (isset($_POST["num"]) && isset($_POST["view"])) {
+if (isset($_POST["currentViewCount"]) && isset($_POST["addCount"])) {
 	$count = 0;
-	if ($_POST["view"] != NULL) {
-		$count = $_POST["view"] + $_POST["num"];
+	if ($_POST["addCount"] !== NULL) {
+		$count = $_POST["currnetViewCount"] + $_POST["addCount"];
 	} else {
-		$count = $_POST["num"];
+		$count = $_POST["addCount"];
 	}	
 	$movie->updateViewCount($count, $_SESSION["video_id"]);
 }
