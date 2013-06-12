@@ -9,7 +9,7 @@
 <H1>アップロード画面</H1>
 ファイルを選択し，タイトル，タグを入力してください<br>
 </head>
-<form action="upload.php" method="post" enctype="multipart/form-data">
+<form action="UploadController.php" method="post" enctype="multipart/form-data">
 <table width="50%" border="0" align="center" cellpadding="8" cellspacing="1" bgcolor="#808080">
 <tr>
 <td bgcolor="#D4D0C8">ファイル</td>
@@ -27,7 +27,7 @@
 <input type="submit" name="submit" value="アップロード">
 </form>
 {{$message|escape}}<br>
-<a href="searchMovie.php">戻る</a>
+<a href="SearchMovieController.php">戻る</a>
 </center>
 </body>
 </html>

@@ -8,11 +8,11 @@
 <center>
 <H1>動画検索画面</H1>
 キーワードを入力して，動画を検索してください<br>
-<a href="logout.php">ログアウト</a>
-<a href="upload.php">アップロード</a>
-<a href="ranking.php">ランキング</a>
+<a href="LogoutController.php">ログアウト</a>
+<a href="UploadController.php">アップロード</a>
+<a href="RankingController.php">ランキング</a>
 <br><br>
-<form action="searchMovie.php?keyword={{$keyword|escape}}" method="get">
+<form action="SearchMovieController.php?keyword={{$keyword|escape}}" method="get">
 <input type="text"   name="keyword" size="30" value="">
 <input type="submit" name="set" value="検索"><br>
 <input type="checkbox" name="title">タイトル
@@ -24,7 +24,7 @@
 <div>
 {{foreach from = $data_list item = data}}
 {{if $data && isset($data.title)}}
-<a href = "videoViewing.php?video_id={{$data.video_id|escape}}&&title={{$data.title|escape}}&&tag={{$data.tag|escape}}">{{$data.title|escape}}</a><br><br>
+<a href = "VideoViewingController.php?video_id={{$data.video_id|escape}}&&title={{$data.title|escape}}&&tag={{$data.tag|escape}}">{{$data.title|escape}}</a><br><br>
 <img src = "{{$data.thumbnail|escape}}" />
 {{/if}}
 {{/foreach}}
