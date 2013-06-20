@@ -6,13 +6,15 @@
 <body>
 <center>
 <H1>ランキング一覧</H1>
-<a href="SearchMovieController.php">戻る</a>
-<br><br>{{$name|escape}}
-{{foreach from = $data_list item = data}}
-{{if $data.count ge 0 }}
-<h4>再生回数:{{$data.count|escape}}</h4>
-{{$data.title|escape}}<br>
-<img src="{{$data.thumbnail|escape}}"/><br>
+<a href="SearchVideoController">戻る</a>
+<div>
+{{$message|escape}}
+</div>
+{{foreach from = $ranking_list item = ranking}}
+{{if $ranking.count ge 0 }}
+<h4>再生回数:{{$ranking.count|escape}}</h4>
+{{$ranking.title|escape}}<br>
+<img src="{{$ranking.thumbnail|escape}}"/><br>
 {{/if}}
 {{/foreach}}
 </center>

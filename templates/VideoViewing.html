@@ -2,31 +2,36 @@
 <html lang = "en">
 <head>
 <meta charset = "UTF-8">
-<title>{{$result.title|escape}}動画</title>
+<title>{{$video_info[0].title|escape}}動画</title>
 <link rel = "stylesheet" type = "text/css" href = "http://49.212.163.77/movie/templates/css/VideoViewing.css">
 </head>
 <body>
 <center>
-<a href = "SearchMovieController.php">戻る</a><br><br>
-<table width = 50% border = 0 cellpadding = 8 cellspacing = 1 bgcolor = #808080><tr>
+<a href = "SearchVideoController">戻る</a><br><br>
+<div>
+{{$message|escape}}
+</div>
+{{foreach from = $video_info item = _video}}
+<table width = 70% border = 0 cellpadding = 8 cellspacing = 1 bgcolor = #808080><tr>
 <td bgcolor = D4D0C8>タイトル</td>
-<td bgcolor = FFFFFF>{{$result.title|escape}}</td>
+<td bgcolor = FFFFFF>{{$_video.title|escape}}</td>
 </tr><tr>
 <td bgcolor = D4D0C8>タグ</td>
-<td bgcolor = FFFFFF>{{$result.tag|escape}}</td>
+<td bgcolor = FFFFFF>{{$_video.tag|escape}}</td>
 </tr><tr>
 <td bgcolor = D4D0C8>投稿者</td>
-<td bgcolor = FFFFFF>{{$result.supplier|escape}}</td>
+<td bgcolor = FFFFFF>{{$_video.usr|escape}}</td>
 </tr><tr>
 <td bgcolor = D4D0C8>再生回数</td>
-<td bgcolor = FFFFFF>{{$result.count|escape}}</td>
+<td bgcolor = FFFFFF>{{$_video.count|escape}}</td>
 </tr>
-<table>
+</table>
+{{/foreach}}
 <div>
 </div>
 </center>
 <canvas id = "canvasOne" width = "600" height = "300"></canvas>
-<textarea id = "movie_comment" readonly></textarea>
+<textarea id = "video_comment" readonly></textarea>
 <script src = "http://49.212.163.77/movie/templates/js/modernizr-2.0.6.js"></script>
 <script src = "http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
 <script type= "text/javascript">
@@ -34,11 +39,10 @@ window.addEventListener('load', eventWindowLoaded, false);
 var count=0;
 var videoElement;
 var videoDiv;
-var flag = false;
 var k = 0;
 var timeID;
 var messages = new Array();
-var title = "{{$result.url|escape}}";
+var title = "{{$_video.url|escape}}";
 var userAgent = window.navigator.userAgent.toLowerCase();
 function eventWindowLoaded() {
 	videoElement = document.createElement("video");
@@ -58,16 +62,15 @@ function videoLoaded() {
 	canvasApp();
 }
 
-{{foreach from = $movie_list key = k item = movie}}
-{{if isset($movie.comment)}}
-	messages[{{$k}}] = {{$movie.comment}};
-{{/if}}
+{{foreach from = $video_list key = k item = video}}
+    {{if isset($video.comment)}}
+	messages[{{$k}}] = {{$video.comment}};
+    {{/if}}
 {{/foreach}}
-
 //コメントされた時間にsort
 messages.sort(function(a,b) { return a.time -b.time;});
 for (var i = 0; i < messages.length; i++) {
-	$("#movie_comment").append(messages[i].time + ":\t" + messages[i].message + "\n");
+	$("#video_comment").append(messages[i].time + ":\t" + messages[i].message + "\n");
 }
 
 //Ajaxを使ってコメント情報をDBに登録する
@@ -80,11 +83,11 @@ $(function(){
 			max:  videoElement.duration};
 			$.ajax({
 				type: "POST",
-				url : "CommentRecord.php",
-				data: data,
-			     });
+				url : "CommentRecordController",
+				data: data
 			});
-		});
+	      });
+});
 
 function canvasApp() {
 
@@ -115,11 +118,11 @@ function canvasApp() {
 			if (videoElement.currentTime > messages[i].time) {
 				if (i < messages.length - 1 ) {
 					if (messages[i+1].x - messages[i].x > 20) {
-						messages[i].x -= velo * 1.5;
-						messages[i+1].x -= velo * 1.2;
-					} else {
-						messages[i].x -= velo * 1.2;
+						messages[i].x -= velo * 2.0;
 						messages[i+1].x -= velo * 1.5;
+					} else {
+						messages[i].x -= velo * 1.5;
+						messages[i+1].x -= velo * 2.0;
 					}
 				}
 				context.font = "bold 16px sans";
@@ -133,7 +136,7 @@ function canvasApp() {
 		if (k < messages.length - 1) {
 			if (videoElement.currentTime != 0 ) {
 				if (messages[k].time - videoElement.currentTime < 0.01) {
-					$("#movie_comment").animate({scrollTop:$("#movie_comment")[0].scrollHeight - $("movie_comment").height()}, 18000);
+					$("#video_comment").animate({scrollTop:$("#video_comment")[0].scrollHeight - $("video_comment").height()}, 18000);
 					k++;
 				}
 			}
@@ -152,62 +155,63 @@ function canvasApp() {
 		if (videoElement.currentTime == 0) {
 			count++;
 			k = 0;
-			{{foreach from = $movie_list key = index item = movie}}
-			{{if isset($movie.comment)}}
-			messages[{{$index}}] = {{$movie.comment}};
-			{{/if}}
+			{{foreach from = $video_list key = index item = video}}
+			   {{if isset($video.comment)}}
+				messages[{{$index}}] = {{$video.comment}};
+			   {{/if}}
 			{{/foreach}}
 
 			for (var i = 0; i < messages.length; i++) {
-				$("#movie_comment").stop();
+				$("#video_comment").stop();
 			}
-			$("#movie_comment").animate({scrollTop:0}, 'fast');
+			$("#video_comment").animate({scrollTop:0}, 'fast');
+			$(function() {
+					var data = {addCount: count,
+					currentViewCount: "{{$_video.count|escape}}"};
+					$.ajax({
+						type: "POST",
+						url : "ViewCountRecordController",
+						data: data,
+						success:function(data){
+						    console.log(data);
+						}
+					});
+		       });
 		}
-		if (flag == true) flag = false;
-		$(function(){
-			var data = {addCount: count,
-			currentViewCount: "{{$result.count|escape}}"};
-			$.ajax({
-				type: "POST",
-				url : "ViewCountRecord.php",
-				data: data,
-			      });
-			});
 	} 
-	//一時停止のelementの取得
-	element = document.getElementById("pause");
-	element.onclick = function() {
-		videoElement.pause();
-		for (var i = 0; i < messages.length; i++) {
-			$("#movie_comment").stop();
-		}
-		flag = true;
+//一時停止のelementの取得
+element = document.getElementById("pause");
+element.onclick = function() {
+	videoElement.pause();
+	for (var i = 0; i < messages.length; i++) {
+		$("#video_comment").stop();
 	}
+}
 
-	//停止のelementの取得(再生回数のリセット)
-	element = document.getElementById("stop");
-	element.onclick = function() {
-		videoElement.currentTime = 0;
-		videoElement.pause();
-		for (var i = 0; i < messages.length; i++) {
-			$("#movie_comment").stop();
-		}
-		$("#movie_comment").animate({scrollTop:0}, 'fast');
-		count = 0;
-		location.href=document.URL;
+//停止のelementの取得(再生回数のリセット)
+element = document.getElementById("stop");
+element.onclick = function() {
+	videoElement.currentTime = 0;
+	videoElement.pause();
+	for (var i = 0; i < messages.length; i++) {
+		$("#video_comment").stop();
 	}
-	var theCanvas = document.getElementById('canvasOne');
-	var context = theCanvas.getContext('2d');
-	setInterval(drawScreen, 33);
-	setInterval(spreadComment, 33);
-	setInterval(getIndicationNumberOfComments, 33);
+	$("#video_comment").animate({scrollTop:0}, 'fast');
+	count = 0;
+	location.href=document.URL;
+}
+var theCanvas = document.getElementById('canvasOne');
+var context = theCanvas.getContext('2d');
+setInterval(drawScreen, 33);
+setInterval(spreadComment, 33);
+setInterval(getIndicationNumberOfComments, 33);
 }
 </script>
 <center>
 <input type = "button" id = "play" value = "play">
 <input type = "button" id = "pause" value = "pause">
 <input type = "button" id = "stop" value = "stop"><br>
-<table width = "50%" border = "0" cellpadding = "8" cellspacing = "1" bgcolor = "#808080">
+<table width = "70%" border = "0" cellpadding = "8" cellspacing = "1" bgcolor = "#808080">
 </center>
 <center>
 <tr>

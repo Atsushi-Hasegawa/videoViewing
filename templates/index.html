@@ -7,7 +7,10 @@
 <center>
 <H1>ログイン画面</H1>
 ユーザ名とパスワードを入力し，「ログイン」ボタンを押してください<br><br>
-<a href="AddUserController.php">新規登録</a>
+<a href="AddUserController">新規登録</a>
+<div>
+ {{$warning|escape}}
+</div>
 <div>
 {{$message|escape}}
 </div>

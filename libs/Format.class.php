@@ -1,10 +1,10 @@
 <?php
 
 class Format {
-	//セキュリティ
-	public function h($str) {
-		$str = htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
-		return $str;
+    public function encode($str) {
+        return (@is_array($str) || empty($str) || is_string($str) === false)
+                 ? false
+                 : htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
 	}
 
 }

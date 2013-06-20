@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CH6EX11 : Canvas Video With Controls</title>
+</head>
+<body>
+<center>
+<H1>動画検索画面</H1>
+キーワードを入力して，動画を検索してください<br>
+<a href="LogoutController">ログアウト</a>
+<a href="UploadController">アップロード</a>
+<a href="RankingController">ランキング</a>
+<br><br>
+<form action="SearchVideoController" method="get">
+<input type="text"   name="keyword" size="30" value="">
+<input type="submit" name="set" value="検索"><br>
+<input type="checkbox" name="title">タイトル
+<input type="checkbox" name="tag">タグ
+</form>
+<div>
+{{$message|escape}}
+</div>
+<div>
+{{foreach from = $video_list item = video_list}}
+{{if $video_list && isset($video_list.title)}}
+<a href = "VideoViewingController">{{$video_list.title|escape}}</a><br><br>
+<img src = "{{$video_list.thumbnail|escape}}" />
+{{/if}}
+{{/foreach}}
+</div>
+</center>
+</body>
+</html>
+
